@@ -1,31 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useReducer, useState } from "react";
 
-import Card from '../UI/Card/Card';
-import classes from './Login.module.css';
-import Button from '../UI/Button/Button';
+import Card from "../UI/Card/Card";
+import classes from "./Login.module.css";
+import Button from "../UI/Button/Button";
+
+const emailReducer = (state, action) => {
+  return { value: "", isValid: false };
+};
 
 const Login = (props) => {
-  const [enteredEmail, setEnteredEmail] = useState('');
+  const [enteredEmail, setEnteredEmail] = useState("");
   const [emailIsValid, setEmailIsValid] = useState();
-  const [enteredPassword, setEnteredPassword] = useState('');
+  const [enteredPassword, setEnteredPassword] = useState("");
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
+
+  const [emailState, dispatchEmail] = useReducer(emailReducer, {
+    value: "",
+    isValid: false,
+  });
 
   useEffect(() => {
     const identifier = setTimeout(() => {
       setFormIsValid(
-        enteredEmail.includes('@') && enteredPassword.trim().length > 6
+        enteredEmail.includes("@") && enteredPassword.trim().length > 6
       );
     }, 500);
-   
+
     return () => {
-      clearTimeout(identifier)
-    }
-  }, [setFormIsValid, enteredEmail, enteredPassword])
+      clearTimeout(identifier);
+    };
+  }, [enteredEmail, enteredPassword]);
 
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
-    
   };
 
   const passwordChangeHandler = (event) => {
@@ -33,7 +41,7 @@ const Login = (props) => {
   };
 
   const validateEmailHandler = () => {
-    setEmailIsValid(enteredEmail.includes('@'));
+    setEmailIsValid(enteredEmail.includes("@"));
   };
 
   const validatePasswordHandler = () => {
@@ -50,7 +58,7 @@ const Login = (props) => {
       <form onSubmit={submitHandler}>
         <div
           className={`${classes.control} ${
-            emailIsValid === false ? classes.invalid : ''
+            emailIsValid === false ? classes.invalid : ""
           }`}
         >
           <label htmlFor="email">E-Mail</label>
@@ -64,7 +72,7 @@ const Login = (props) => {
         </div>
         <div
           className={`${classes.control} ${
-            passwordIsValid === false ? classes.invalid : ''
+            passwordIsValid === false ? classes.invalid : ""
           }`}
         >
           <label htmlFor="password">Password</label>
